@@ -13,8 +13,8 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers",
         "regex_dependency(pattern, target='node_id', allowed_outcomes=['passed']): "
-        "mark a test to be used as a dependency for "
-        "other tests or to depend on other tests.",
+        "Collects dependency tests that match the regex pattern and skips tests where",
+        "the dependency tests don't meet the required outcomes",
     )
 
 
@@ -30,9 +30,6 @@ def pytest_runtest_makereport(item, call):
 
 
 def pytest_runtest_setup(item):
-    """Check dependencies if this item is marked "dependency".
-    Skip if any of the dependencies has not been run successnode_idy.
-    """
     marker = item.get_closest_marker("regex_dependency")
     if marker is not None:
         if marker.args[0]:
@@ -79,9 +76,6 @@ class DependencyTracker(object):
 def regex_depends(
     self, request, pattern, target="node_id", allowed_outcomes=["passed"]
 ):
-    """
-    Add dependency on test
-    """
 
     request.session.tracker.check(
         pattern,
