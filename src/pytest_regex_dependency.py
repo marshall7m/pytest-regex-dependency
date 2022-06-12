@@ -13,7 +13,7 @@ def pytest_configure(config):
     config.addinivalue_line(
         "markers",
         "regex_dependency(pattern, target='node_id', allowed_outcomes=['passed']): "
-        "Collects dependency tests that match the regex pattern and skips tests where",
+        "Collects dependency tests that match the regex pattern and skips tests where"
         "the dependency tests don't meet the required outcomes",
     )
 
@@ -49,28 +49,49 @@ class DependencyTracker(object):
         self.results.setdefault(result.nodeid, [])
         self.results[result.nodeid] += [result.outcome]
 
-    def valid(self, nodeid, allowed_outcomes):
-        outcomes = ["passed", "skipped", "failed"]
-        invalid_outcomes = [out for out in outcomes if out not in allowed_outcomes]
+    def valid(self, outcomes, allowed_outcomes):
+        all_outcomes = ["passed", "skipped", "failed"]
+        invalid_outcomes = [out for out in all_outcomes if out not in allowed_outcomes]
         log.debug(f"Invalid outcomes: {invalid_outcomes}")
-        log.debug(f"Outcomes: {self.results[nodeid]}")
+        log.debug(f"Outcomes: {outcomes}")
 
         for out in invalid_outcomes:
-            if out in self.results[nodeid]:
+            if out in outcomes:
                 return False
         return True
 
     def check(self, pattern, target, allowed_outcomes, test_name):
-        if target == "node_id":
-            log.debug(f"zozo: {self.results.items()}")
-            for nodeid, outcome in self.results.items():
-                if re.search(pattern, nodeid):
-                    if self.valid(nodeid, allowed_outcomes):
-                        log.debug(f"Dependency has expected outcomes: {nodeid}")
-                    else:
-                        pytest.skip(
-                            f"Outcome for dependency: {nodeid} not expected  -- skipping test: {test_name}"
-                        )
+        for nodeid, outcomes in self.results.items():
+            if target == "node_id":
+                target_match = re.search(pattern, nodeid)
+
+            elif target == "module":
+                target_match = re.search(pattern, nodeid.split("::")[0])
+
+            elif target == "class":
+                parsed_node_id = nodeid.split("::")
+                if len(parsed_node_id) == 3:
+                    target_match = re.search(pattern, nodeid.split("::")[1])
+                else:
+                    target_match = False
+
+            elif target == "function":
+                parsed_node_id = nodeid.split("::")
+                if len(parsed_node_id) == 3:
+                    target_match = re.search(pattern, nodeid.split("::")[2])
+                else:
+                    target_match = re.search(pattern, nodeid.split("::")[1])
+
+            else:
+                pytest.fail(f"target argument value is unknown: {target}")
+
+            if target_match:
+                if self.valid(outcomes, allowed_outcomes):
+                    log.debug(f"Dependency has expected outcomes: {nodeid}")
+                else:
+                    pytest.skip(
+                        f"Outcome for dependency: {nodeid} not expected  -- skipping test: {test_name}"
+                    )
 
 
 def regex_depends(
