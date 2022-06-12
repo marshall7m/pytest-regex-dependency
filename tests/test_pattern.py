@@ -2,7 +2,7 @@ def test_matched(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         def test_a():
             pass
@@ -28,7 +28,7 @@ def test_not_matched(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         def test_a():
             pass

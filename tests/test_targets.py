@@ -2,7 +2,7 @@ def test_node_id_no_skip(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         def test_a():
             pass
@@ -38,7 +38,7 @@ def test_node_id_skip(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         def test_a():
             pytest.skip()
@@ -74,7 +74,7 @@ def test_class_no_skip(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         class TestClass:
             def test_a(self):
@@ -101,7 +101,7 @@ def test_class_skip(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         class TestClass:
             def test_a(self):
@@ -129,7 +129,7 @@ def test_module_no_skip(base_tester):
     base_tester.makepyfile(
         test_dependency="""
         import pytest
-        import os
+
 
         def test_a():
             pass
@@ -143,7 +143,7 @@ def test_module_no_skip(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         @pytest.mark.regex_dependency('test_dependency\.py', target='module')
         def test_a():
@@ -168,7 +168,7 @@ def test_module_skip(base_tester):
     base_tester.makepyfile(
         test_dependency="""
         import pytest
-        import os
+
 
         def test_a():
             pass
@@ -182,7 +182,7 @@ def test_module_skip(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         @pytest.mark.regex_dependency('test_dependency\.py', target='module')
         def test_a():
@@ -207,7 +207,7 @@ def test_function_no_skip(base_tester):
     base_tester.makepyfile(
         test_dependency="""
         import pytest
-        import os
+
 
         def test_a():
             pass
@@ -221,7 +221,7 @@ def test_function_no_skip(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         def test_a():
             pass
@@ -250,7 +250,7 @@ def test_function_skip(base_tester):
     base_tester.makepyfile(
         test_dependency="""
         import pytest
-        import os
+
 
         def test_a():
             pytest.skip()
@@ -264,7 +264,7 @@ def test_function_skip(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
         def test_a():
             pass

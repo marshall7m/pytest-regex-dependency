@@ -2,7 +2,6 @@ def test_class_depends_on_function(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
 
 
         def test_a():
@@ -30,7 +29,7 @@ def test_class_depends_on_class(base_tester):
     base_tester.makepyfile(
         """
         import pytest
-        import os
+
 
 
         class TestClassA:
