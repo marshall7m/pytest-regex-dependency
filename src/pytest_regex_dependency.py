@@ -3,7 +3,6 @@ import logging
 import re
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
 
 
 def pytest_configure(config):
