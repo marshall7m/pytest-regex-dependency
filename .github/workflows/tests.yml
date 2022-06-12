@@ -24,7 +24,6 @@ on:
 
 env:
   PYTEST_ADDOPTS: --color=yes
-  TFENV_VERSION: 2.2.2
 
 jobs:
   precommit:
@@ -32,29 +31,26 @@ jobs:
     container: bitnami/git:2.35.1
     steps:
       - uses: actions/checkout@v3
-
       - name: Hooks
         shell: bash
         run: |
           apt-get -y update
           apt-get -y install --no-install-recommends python3-pip
-          python3 -m pip install --upgrade pip
           python3 -m pip install pre-commit
+
           pre-commit install
           pre-commit run --all-files
-  unit:
+
+  tests:
     needs: precommit
     runs-on: ubuntu-latest
     container: python:3.9-slim-buster
     steps:
       - uses: actions/checkout@v3
 
-      - name: Install deps
-        id: install
-        shell: bash
-        run: bash install.sh
-
       - name: Tests
         id: pytest
         shell: bash
-        run: pytest -vv tests
+        run: |
+          python3 -m pip install .
+          pytest -vv tests
