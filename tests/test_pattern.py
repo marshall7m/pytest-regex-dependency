@@ -1,4 +1,4 @@
-def test_node_id_no_skip(base_tester):
+def test_matched(base_tester):
     base_tester.makepyfile(
         """
         import pytest
@@ -7,64 +7,44 @@ def test_node_id_no_skip(base_tester):
         def test_a():
             pass
 
-        @pytest.mark.regex_dependency('test_node_id_no_skip\\.py::test_a')
+        # regex doesn't match anything see SO: https://stackoverflow.com/a/2930280/12659025
+        @pytest.mark.regex_dependency('test_matched.py::test_a')
         def test_b():
             pass
-
-        @pytest.mark.regex_dependency('test_node_id_no_skip\\.py::test_b')
-        def test_c():
-            pass
-
     """
     )
-    result = base_tester.runpytest("--verbose", "-s")
-    result.assert_outcomes(passed=3, skipped=0, failed=0)
+
+    result = base_tester.runpytest("--verbose")
+    result.assert_outcomes(passed=2, skipped=0, failed=0)
     result.stdout.re_match_lines(
         r"""
         .*::test_a PASSED(?:\s+\(.*\))?
         .*::test_b PASSED(?:\s+\(.*\))?
-        .*::test_c PASSED(?:\s+\(.*\))?
     """
     )
 
 
-def test_node_id_skip(base_tester):
+def test_not_matched(base_tester):
     base_tester.makepyfile(
         """
         import pytest
         import os
 
         def test_a():
-            pytest.skip()
+            pass
 
-        @pytest.mark.regex_dependency('test_node_id_skip\\.py::test_a')
+        # regex doesn't match anything see SO: https://stackoverflow.com/a/2930280/12659025
+        @pytest.mark.regex_dependency('\b\B')  # noqa: W605
         def test_b():
             pass
-
-        @pytest.mark.regex_dependency('test_node_id_skip\\.py::test_b')
-        def test_c():
-            pass
-
     """
     )
-    result = base_tester.runpytest("--verbose", "-s")
-    result.assert_outcomes(passed=0, skipped=3, failed=0)
+
+    result = base_tester.runpytest("--verbose")
+    result.assert_outcomes(passed=2, skipped=0, failed=0)
     result.stdout.re_match_lines(
         r"""
-        .*::test_a SKIPPED(?:\s+\(.*\))?
-        .*::test_b SKIPPED(?:\s+\(.*\))?
-        .*::test_c SKIPPED(?:\s+\(.*\))?
+        .*::test_a PASSED(?:\s+\(.*\))?
+        .*::test_b PASSED(?:\s+\(.*\))?
     """
     )
-
-
-def test_module_skip():
-    pass
-
-
-def test_class():
-    pass
-
-
-def test_function():
-    pass
