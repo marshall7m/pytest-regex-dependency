@@ -1,14 +1,11 @@
 import pytest
 import logging
-import sys
 
 pytest_plugins = [
     str("_pytest.pytester"),
 ]
 
 log = logging.getLogger(__name__)
-stream = logging.StreamHandler(sys.stdout)
-log.addHandler(stream)
 log.setLevel(logging.DEBUG)
 
 
