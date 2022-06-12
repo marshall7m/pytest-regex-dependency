@@ -1,11 +1,8 @@
 import pytest
 import logging
-import sys
 import re
 
 log = logging.getLogger(__name__)
-stream = logging.StreamHandler(sys.stdout)
-log.addHandler(stream)
 log.setLevel(logging.DEBUG)
 
 
@@ -46,6 +43,10 @@ class DependencyTracker(object):
         self.results = {}
 
     def add(self, result):
+        log.info(f"Adding {result.nodeid} outcome to dependency tracker")
+        log.debug(f"\tPhase: {result.when}")
+        log.debug(f"\tOutcome: {result.outcome}")
+
         self.results.setdefault(result.nodeid, [])
         self.results[result.nodeid] += [result.outcome]
 
@@ -86,6 +87,7 @@ class DependencyTracker(object):
                 pytest.fail(f"target argument value is unknown: {target}")
 
             if target_match:
+                log.debug(f"Checking dependency: {nodeid}")
                 if self.valid(outcomes, allowed_outcomes):
                     log.debug(f"Dependency has expected outcomes: {nodeid}")
                 else:
