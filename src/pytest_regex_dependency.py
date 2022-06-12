@@ -94,9 +94,7 @@ class DependencyTracker(object):
                     )
 
 
-def regex_depends(
-    self, request, pattern, target="node_id", allowed_outcomes=["passed"]
-):
+def regex_depends(request, pattern, target="node_id", allowed_outcomes=["passed"]):
 
     request.session.tracker.check(
         pattern,
