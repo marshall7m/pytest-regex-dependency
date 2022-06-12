@@ -18,8 +18,8 @@ def test_matched(base_tester):
     result.assert_outcomes(passed=2, skipped=0, failed=0)
     result.stdout.re_match_lines(
         r"""
-        .*::test_a PASSED(?:\s+\(.*\))?
-        .*::test_b PASSED(?:\s+\(.*\))?
+        .*::test_a PASSED
+        .*::test_b PASSED
     """
     )
 
@@ -44,7 +44,7 @@ def test_not_matched(base_tester):
     result.assert_outcomes(passed=2, skipped=0, failed=0)
     result.stdout.re_match_lines(
         r"""
-        .*::test_a PASSED(?:\s+\(.*\))?
-        .*::test_b PASSED(?:\s+\(.*\))?
+        .*::test_a PASSED
+        .*::test_b PASSED
     """
     )

@@ -29,11 +29,11 @@ def test_valid_outcomes(base_tester):
     result.assert_outcomes(passed=5, skipped=0, failed=0)
     result.stdout.re_match_lines(
         r"""
-        .*::test_a PASSED(?:\s+\(.*\))?
-        .*::test_b PASSED(?:\s+\(.*\))?
-        .*::test_c PASSED(?:\s+\(.*\))?
-        .*::test_d PASSED(?:\s+\(.*\))?
-        .*::test_e PASSED(?:\s+\(.*\))?
+        .*::test_a PASSED
+        .*::test_b PASSED
+        .*::test_c PASSED
+        .*::test_d PASSED
+        .*::test_e PASSED
     """
     )
 
@@ -65,9 +65,9 @@ def test_invalid_outcomes(base_tester):
     result.assert_outcomes(passed=1, skipped=3, failed=0)
     result.stdout.re_match_lines(
         r"""
-        .*::test_a PASSED(?:\s+\(.*\))?
-        .*::test_b SKIPPED(?:\s+\(.*\))?
-        .*::test_c SKIPPED(?:\s+\(.*\))?
-        .*::test_d SKIPPED(?:\s+\(.*\))?
+        .*::test_a PASSED
+        .*::test_b SKIPPED
+        .*::test_c SKIPPED
+        .*::test_d SKIPPED
     """
     )
